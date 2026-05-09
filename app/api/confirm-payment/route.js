@@ -3,7 +3,7 @@
 // Also callable manually: GET /api/confirm-payment?ref=REG123
 // Polls LivePay for pending registrations and confirms them.
 import { NextResponse } from 'next/server'
-import { adminSupabase }  from '@/lib/supabase'
+import { adminSupabase }  from '@/lib/supabase-server'
 
 const LIVEPAY_BASE = process.env.LIVEPAY_BASE_URL || 'https://livepay.me/api'
 const API_KEY      = process.env.LIVEPAY_API_KEY

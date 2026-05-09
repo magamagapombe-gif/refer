@@ -2,7 +2,7 @@
 // Body: { amount, phone, network }
 // Requires: authenticated user (active, with sufficient balance)
 import { NextResponse } from 'next/server'
-import { adminSupabase }  from '@/lib/supabase'
+import { adminSupabase }  from '@/lib/supabase-server'
 import { requireUser }    from '@/lib/auth'
 import { sendMoney, makeRef } from '@/lib/livepay'
 

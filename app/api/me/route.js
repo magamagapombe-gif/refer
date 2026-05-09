@@ -2,7 +2,7 @@
 // Returns the authenticated user's full dashboard data:
 // wallet balance, rank, referral count, recent transactions
 import { NextResponse } from 'next/server'
-import { adminSupabase }  from '@/lib/supabase'
+import { adminSupabase }  from '@/lib/supabase-server'
 import { requireUser }    from '@/lib/auth'
 
 export async function GET() {

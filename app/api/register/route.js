@@ -4,7 +4,7 @@
 // 2. Calls LivePay /collect-money for registration fee
 // 3. Creates registrations row — confirmed later by poller
 import { NextResponse } from 'next/server'
-import { adminSupabase }  from '@/lib/supabase'
+import { adminSupabase }  from '@/lib/supabase-server'
 import { collectMoney, makeRef } from '@/lib/livepay'
 
 const FEE = Number(process.env.REGISTRATION_FEE) || 30000
