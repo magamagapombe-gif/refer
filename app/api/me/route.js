@@ -1,6 +1,8 @@
 // GET /api/me
 // Returns the authenticated user's full dashboard data:
 // wallet balance, rank, referral count, recent transactions
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import { adminSupabase }  from '@/lib/supabase-server'
 import { requireUser }    from '@/lib/auth'

@@ -1,9 +1,10 @@
 'use client'
+import { Suspense } from 'react'
 import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { s, btn, input, card, alert } from '@/lib/styles'
 
-export default function JoinPage() {
+function JoinInner() {
   const params  = useSearchParams()
   const router  = useRouter()
   const refCode = params.get('ref') || ''
@@ -119,6 +120,14 @@ export default function JoinPage() {
         </form>
       </div>
     </Layout>
+  )
+}
+
+export default function JoinPage() {
+  return (
+    <Suspense fallback={<Layout><div style={{ textAlign: 'center', padding: 40 }}>Loading…</div></Layout>}>
+      <JoinInner />
+    </Suspense>
   )
 }
 
