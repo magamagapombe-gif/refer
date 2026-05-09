@@ -4,9 +4,6 @@
   "devCommand": "next dev",
   "installCommand": "npm install",
   "crons": [
-    {
-      "path": "/api/confirm-payment",
-      "schedule": "* * * * *"
-    }
+
   ]
 }
