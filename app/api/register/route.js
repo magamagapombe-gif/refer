@@ -1,6 +1,7 @@
 // POST /api/register
 // Body: { name, phone, network, referral_code? }
 // 1. Creates pending user in Supabase
+export const dynamic = 'force-dynamic'
 // 2. Calls LivePay /collect-money for registration fee
 // 3. Creates registrations row — confirmed later by poller
 import { NextResponse } from 'next/server'
@@ -9,9 +10,22 @@ import { collectMoney, makeRef } from '@/lib/livepay'
 
 const FEE = Number(process.env.REGISTRATION_FEE) || 30000
 
+// ── Startup env check (shows in Vercel function logs) ────────
+const missingEnv = [
+  'NEXT_PUBLIC_SUPABASE_URL',
+  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'LIVEPAY_API_KEY',
+  'LIVEPAY_ACCOUNT_NUM',
+].filter(k => !process.env[k])
+if (missingEnv.length) {
+  console.error('[/api/register] MISSING ENV VARS:', missingEnv.join(', '))
+}
+
 export async function POST(req) {
   try {
     const { name, phone, network, referral_code } = await req.json()
+    console.log('[/api/register] body:', { name, phone, network, referral_code })
 
     // ── Validate ───────────────────────────────────────────────
     if (!name || !phone || !network) {
@@ -97,7 +111,7 @@ export async function POST(req) {
     })
 
   } catch (err) {
-    console.error('[/api/register]', err)
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+    console.error('[/api/register] CAUGHT ERROR:', err?.message || err)
+    return NextResponse.json({ error: err?.message || 'Server error' }, { status: 500 })
   }
 }
