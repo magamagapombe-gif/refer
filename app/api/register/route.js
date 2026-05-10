@@ -74,6 +74,20 @@ export async function POST(req) {
 
     // ── Collect registration fee via LivePay ───────────────────
     const reference = makeRef('REG')
+    const BASE = process.env.LIVEPAY_BASE_URL || 'https://livepay.me/api'
+    console.log('[/api/register] LivePay BASE_URL:', BASE)
+    console.log('[/api/register] API_KEY set:', !!process.env.LIVEPAY_API_KEY)
+    console.log('[/api/register] ACCOUNT_NUM set:', !!process.env.LIVEPAY_ACCOUNT_NUM)
+
+    // Raw connectivity test before calling collectMoney
+    try {
+      const ping = await fetch(BASE, { method: 'GET' })
+      console.log('[/api/register] LivePay ping status:', ping.status)
+    } catch (pingErr) {
+      console.error('[/api/register] LivePay UNREACHABLE:', pingErr.cause?.code, pingErr.cause?.hostname, pingErr.message)
+      return NextResponse.json({ error: `Cannot reach LivePay at ${BASE} — check LIVEPAY_BASE_URL env var` }, { status: 502 })
+    }
+
     const { ok, data: lp } = await collectMoney({
       phone,
       amount: FEE,
@@ -82,6 +96,7 @@ export async function POST(req) {
       description: 'Refer App — registration fee',
     })
 
+    console.log('[/api/register] LivePay response:', JSON.stringify({ ok, lp }))
     if (!ok || !lp.success) {
       // Don't delete user — let them retry with same phone
       return NextResponse.json(
